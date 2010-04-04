@@ -1,0 +1,11 @@
+{
+  "todo" : [
+    "write http server example",
+    "add | selector for optional params",
+    "make port designations more human-readable"
+  ],
+  "done" : [
+    "confirm that conductor performs parallel operations"
+  ]
+}
+
