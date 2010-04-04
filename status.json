@@ -1,5 +1,6 @@
 {
   "todo" : [
+    "improve the implicit error / sync operation situation",
     "write http server example",
     "add | selector for optional params",
     "make port designations more human-readable"
