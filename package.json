@@ -7,6 +7,7 @@
     { "name": "Timothy Caswell", "web": "http://creationix.com" },
     { "name": "Elijah Insua", "web": "http://tmpvar.com" }
   ],
+  "contributers": [
     { "name": "Timothy Caswell", "web": "http://creationix.com" },
     { "name": "Elijah Insua", "web": "http://tmpvar.com" }
   ],
@@ -15,6 +16,6 @@
     "type": "git",
     "url": "http://github.com//conductor.git"
   },
-  dependencies: {},
-  main : "lib/conductor"
+  "dependencies": {},
+  "main" : "lib/conductor"
 }
