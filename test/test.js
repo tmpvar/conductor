@@ -25,7 +25,7 @@ var tests   = [],
 
       var index = tests.length-1;
       return function(m, l) {
-        tests[index].failmsg = m || failmsg;
+        tests[index].msg = m || failmsg;
         tests[index].logic   = l || logic;
         execute(index);
       };
@@ -218,10 +218,11 @@ var flow = conductor(),
       D : flow.node(function(str1, str2) { return str1 + str2; }, "saj-D"),
     }, splitAndJoinSyncTest = soon("Execution should result in BA1CA2");
 saj.A.input(0, saj.B.input(0));
-saj.A.input(1, saj.C.input(1));
+saj.A.input(1, saj.C.input(0));
 saj.B.output(saj.D.input(0));
 saj.C.output(saj.D.input(1));
 saj.D.output(function(value) {
+  console.log("in D", value);
   splitAndJoinSyncTest("Execution should result in BA1CA2 not " + value,
                    value === "BA1CA2");
 });
