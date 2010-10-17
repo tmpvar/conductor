@@ -130,14 +130,17 @@ ok("a join node input edge is satisfied when all inputs are satisfied",
 //   |  |
 //  [scn3]
 
-
 var satisfyCallbackConductor = conductor(),
-    scn1 = satisfyCallbackConductor.node(null, "scn1"),
-    scn2 = satisfyCallbackConductor.node(null, "scn2"),
-    scn3 = satisfyCallbackConductor.node(null, "scn3"),
+    scn1 = satisfyCallbackConductor.node(function(fn1,fn2) {
+      fn1("calling scn2#0");
+      fn2("calling scn3#0");
+    }, "scn1"),
+    scn2 = satisfyCallbackConductor.node(function(val) {
+      return val;
+    } , "scn2"),
+    scn3 = satisfyCallbackConductor.node(function() {
+    }, "scn3"),
     scc  = new Context();
-
-scn1.execute = scn2.execute = scn3.execute = function() {};
 
 scn1.input(0, scn2.input(0));
 scn1.input(1, scn3.input(0));
@@ -308,8 +311,7 @@ var paspResults = ['910','78','56','34','12'],
         return value;
       }, "pasp-C"),
       D : paspflow.node(function(v1, v2) {
-console.log("in D");
-        return v1+ "" + v2;
+        return v1 + "" + v2;
       }, "pasp-D"),
       E : paspflow.node(function(value) {
           var ex = paspResults.shift();
