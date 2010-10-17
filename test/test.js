@@ -206,7 +206,7 @@ n2.output(function(str) {
 });
 
 c1.execute();
-/*
+
 // Split and join (Sync)
 var flow = conductor(),
     saj = {
@@ -224,7 +224,7 @@ saj.D.output(function(value) {
                        value === "BA1CA2");
 });
 flow.execute();
-*/
+
 // Split and join (Async)
 var sajAsyncFlow = conductor(),
     sajAsync = {
@@ -232,25 +232,22 @@ var sajAsyncFlow = conductor(),
       B : sajAsyncFlow.node(function(str) { return "B" + str }, "saja-B"),
       C : sajAsyncFlow.node(function(fn, str) {
         setTimeout(function() {
-          if (typeof fn === "function") {
-            fn("C" + str);
-          }
+          fn("C" + str);
         }, 10);
       }, "saja-C"),
       D : sajAsyncFlow.node(function(str1, str2) { return str1 + str2; }, "saja-D")
     }, splitAndJoinAsyncTest = soon("Execution should result in BA1CA2");
 sajAsync.A.input(0, sajAsync.B.input(0));
-sajAsync.A.input(1, sajAsync.C.input(0));
+sajAsync.A.input(1, sajAsync.C.input(1));
 sajAsync.B.output(sajAsync.D.input(0));
-sajAsync.C.output(sajAsync.D.input(1));
+sajAsync.C.input(0, sajAsync.D.input(1));
 sajAsync.D.output(function(value) {
-console.log(value);
   splitAndJoinAsyncTest("Execution should result in BA1CA2 not " + value,
                        value === "BA1CA2");
 });
 sajAsyncFlow.execute();
 
-/*
+
 // Parallel flows (Async)
 var results = [4,3,2,1],
     pflow = conductor(),
@@ -258,9 +255,7 @@ var results = [4,3,2,1],
       A : pflow.node(function(fn) {
         var count = 4, loc = 1;
         setTimeout(function next() {
-          if (typeof fn === "function") {
-            fn(loc);
-          }
+          fn(loc);
           loc++;
           if (loc <= count) {
             setTimeout(next, 0);
@@ -269,9 +264,7 @@ var results = [4,3,2,1],
       }),
       B : pflow.node(function(value, fn) {
         setTimeout(function() {
-          if (typeof fn === "function") {
-            fn(value);
-          }
+          fn(value);
         }, 1000/value);
       }),
       C : pflow.node(function(value) {
@@ -284,12 +277,12 @@ var results = [4,3,2,1],
       })
     };
 
-pAsync.B.input(0, pAsync.A.input(0));
-pAsync.C.input(0, pAsync.B.input(1));
-pAsync.C.output(0, pAsync.D.input(0));
+pAsync.A.input(0, pAsync.B.input(0));
+pAsync.B.input(1, pAsync.C.input(0));
+pAsync.C.output(pAsync.D.input(0));
 pflow.execute();
 
-
+/*
 // Paralell Asynchronous Split/Join
 var paspResults = [10,9,8,7,6,5,4,3,2,1],
     paspflow = conductor(),
