@@ -123,13 +123,13 @@ ok("a join node input edge is satisfied when all inputs are satisfied",
    satisfyNode.edges.input.satisfied(satisfyContext));
 
 // Satisfaction (callbacks)
-/*
-  [scn1]
-   |  |
-   | [scn2]
-   |  |
-  [scn3]
-*/
+
+//  [scn1]
+//   |  |
+//   | [scn2]
+//   |  |
+//  [scn3]
+
 
 var satisfyCallbackConductor = conductor(),
     scn1 = satisfyCallbackConductor.node(null, "scn1"),
@@ -282,62 +282,54 @@ pAsync.B.input(1, pAsync.C.input(0));
 pAsync.C.output(pAsync.D.input(0));
 pflow.execute();
 
-/*
+
 // Paralell Asynchronous Split/Join
 var paspResults = [10,9,8,7,6,5,4,3,2,1],
     paspflow = conductor(),
     pasp = {
       A : paspflow.node(function(cb1, cb2) {
-        console.log("in a");
         var count = 10, loc = 1;
         setTimeout(function paspnext() {
-          console.log("calling cb1", loc);
           cb1(loc);
           loc++;
-          console.log("calling cb2", loc);
           cb2(loc);
           loc++;
           if (loc <= count) {
             setTimeout(paspnext, 0);
           }
         }, 0);
-        console.log("exiting a");
-      }),
+      }, "pasp-A"),
       B : paspflow.node(function(value, fn) {
-        console.log("in b", value);
         setTimeout(function() {
-          if (typeof fn === "function") {
             fn(value);
-          }
         }, 1000/value);
-      }),
+      }, "pasp-B"),
       C : paspflow.node(function(value) {
-        console.log("in c", value);
         return value;
-      }),
+      }, "pasp-C"),
       D : paspflow.node(function(v1, v2) {
-        console.log("in d:", v1, v2);
+console.log("in D");
         return v1+ "" + v2;
-      }),
+      }, "pasp-D"),
       E : paspflow.node(function(value) {
-          console.log("in e", value);
           var ex = paspResults.shift();
           ok("parallel split/join results should be " + ex + " not " + value,
              value === ex);
-      })
+      }, "pasp-E")
     };
 
-pasp.B.input(0, pasp.A.input(0));
-pasp.C.input(0, pasp.A.input(1));
-pasp.D.input(0, pasp.B.input(1));
-pasp.D.input(1, pasp.C.output(0));
-pasp.E.input(0, pasp.D.output(0));
+pasp.A.input(0, pasp.B.input(0));
+pasp.A.input(1, pasp.C.input(0));
+pasp.B.input(1, pasp.D.input(0));
+pasp.C.output(pasp.D.input(1));
+pasp.D.output(pasp.E.input(0));
 paspflow.execute();
-*/
+
 //
 // RESULTS
 //
 process.on("exit", function() {
+
 console.log("Exiting!");
   for (var i=0; i<tests.length; i++) {
     if (tests[i].error) {
