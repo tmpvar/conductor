@@ -386,8 +386,6 @@ paspflow.execute();
 // RESULTS
 //
 process.on("exit", function() {
-
-console.log("Exiting!");
   for (var i=0; i<tests.length; i++) {
     if (tests[i].error) {
       console.log(tests[i].error);
