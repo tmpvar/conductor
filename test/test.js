@@ -90,6 +90,8 @@ forkNode2.input(1, joinNode.input(3));
 
 ok("nodes with an output and a callback are fork nodes", forkNode.isFork());
 ok("nodes with multiple callbacks are fork nodes", forkNode2.isFork());
+ok("nodes with multiple inputs are join nodes", joinNode.isJoin());
+
 
 // Satisfaction (no callbacks)
 var satisfyNode = conductor().node(null, "satisfyNode"),
@@ -155,12 +157,8 @@ scn1.edges.callback.satisfy(scc, 1, "scn1's output from callback 2");
 ok("fork nodes emit when all callbacks have been satisfied",
    scn1.edges.callback.satisfied(scc));
 
-console.log(scn2.edges.input.values(scc))
-
 ok("when a fork node is satisfied, its values are forwarded",
    scn2.edges.input.satisfied(scc));
-
-
 
 // Ports and pipes
 var ptc = conductor(),
@@ -208,7 +206,7 @@ n2.output(function(str) {
 });
 
 c1.execute();
-
+/*
 // Split and join (Sync)
 var flow = conductor(),
     saj = {
@@ -222,39 +220,37 @@ saj.A.input(1, saj.C.input(0));
 saj.B.output(saj.D.input(0));
 saj.C.output(saj.D.input(1));
 saj.D.output(function(value) {
-  console.log("in D", value);
   splitAndJoinSyncTest("Execution should result in BA1CA2 not " + value,
-                   value === "BA1CA2");
+                       value === "BA1CA2");
 });
-
 flow.execute();
-/*
+*/
 // Split and join (Async)
-var flow = conductor(),
+var sajAsyncFlow = conductor(),
     sajAsync = {
-      A : flow.node(function(a1, a2) { a1("A1"); a2("A2"); }),
-      B : flow.node(function(str) { return "B" + str }),
-      C : flow.node(function(fn, str) {
+      A : sajAsyncFlow.node(function(a1, a2) { a1("A1"); a2("A2"); }, "saja-A"),
+      B : sajAsyncFlow.node(function(str) { return "B" + str }, "saja-B"),
+      C : sajAsyncFlow.node(function(fn, str) {
         setTimeout(function() {
           if (typeof fn === "function") {
             fn("C" + str);
           }
         }, 10);
-      }),
-      D : flow.node(function(str1, str2) { return str1 + str2; })
+      }, "saja-C"),
+      D : sajAsyncFlow.node(function(str1, str2) { return str1 + str2; }, "saja-D")
     }, splitAndJoinAsyncTest = soon("Execution should result in BA1CA2");
-
-sajAsync.B.input(0, sajAsync.A.input(0)); // callback
-sajAsync.C.input(1, sajAsync.A.input(1)); // callback
-sajAsync.D.input(0, sajAsync.B.output(0));
-sajAsync.D.input(1, sajAsync.C.input(0)); // callback
-sajAsync.D.output(0,function(value) {
+sajAsync.A.input(0, sajAsync.B.input(0));
+sajAsync.A.input(1, sajAsync.C.input(0));
+sajAsync.B.output(sajAsync.D.input(0));
+sajAsync.C.output(sajAsync.D.input(1));
+sajAsync.D.output(function(value) {
+console.log(value);
   splitAndJoinAsyncTest("Execution should result in BA1CA2 not " + value,
-     value === "BA1CA2");
+                       value === "BA1CA2");
 });
+sajAsyncFlow.execute();
 
-flow.execute();
-
+/*
 // Parallel flows (Async)
 var results = [4,3,2,1],
     pflow = conductor(),
