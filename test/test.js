@@ -126,8 +126,10 @@ ok("a join node input edge is satisfied when all inputs are satisfied",
 
 //  [scn1]
 //   |  |
+//   |  v
 //   | [scn2]
 //   |  |
+//   v  v
 //  [scn3]
 
 var satisfyCallbackConductor = conductor(),
@@ -156,12 +158,6 @@ scn1.edges.callback.satisfy(scc, 0, "scn1's output from callback 1");
 ok("fork nodes are not satisfied until all callbacks have been satisfied",
    !scn1.edges.callback.satisfied(scc));
 
-scn1.edges.callback.satisfy(scc, 1, "scn1's output from callback 2");
-ok("fork nodes emit when all callbacks have been satisfied",
-   scn1.edges.callback.satisfied(scc));
-
-ok("when a fork node is satisfied, its values are forwarded",
-   scn2.edges.input.satisfied(scc));
 
 // Ports and pipes
 var ptc = conductor(),
@@ -182,6 +178,12 @@ ok("ptc2's input edge should be satisfied",
 
 
 // Sanity test
+//
+// [n]
+//  |
+//  v
+// [output]
+//
 var c = conductor(),
     n = c.node(function() {
       return "first node!";
@@ -194,6 +196,15 @@ n.output(function(str) {
 c.execute();
 
 // 2 node flow (Sync)
+//
+// [n1]
+//  |
+//  v
+// [n2]
+//  |
+//  v
+// [output]
+//
 var c1 = conductor(),
     n1 = c1.node(function() {
       return "1";
@@ -211,6 +222,18 @@ n2.output(function(str) {
 c1.execute();
 
 // Split and join (Sync)
+//
+//   [A]
+//   | |
+//   v v
+// [B] [C]
+//   | |
+//   v v
+//   [D]
+//    |
+//    v
+// [output]
+//
 var flow = conductor(),
     saj = {
       A : flow.node(function(a1, a2) { a1("A1"); a2("A2"); }, "saj-A"),
@@ -229,6 +252,18 @@ saj.D.output(function(value) {
 flow.execute();
 
 // Split and join (Async)
+//
+//   [A]
+//   | |
+//   v v
+// [B] [C]
+//   | |
+//   v v
+//   [D]
+//    |
+//    v
+// [output]
+//
 var sajAsyncFlow = conductor(),
     sajAsync = {
       A : sajAsyncFlow.node(function(a1, a2) { a1("A1"); a2("A2"); }, "saja-A"),
@@ -252,6 +287,14 @@ sajAsyncFlow.execute();
 
 
 // Parallel flows (Async)
+// [A]
+//  |
+//  v
+// [B]
+//  |
+//  v
+// [C]
+//
 var results = [4,3,2,1],
     pflow = conductor(),
     pAsync = {
@@ -286,7 +329,19 @@ pAsync.C.output(pAsync.D.input(0));
 pflow.execute();
 
 
-// Paralell Asynchronous Split/Join
+// Parallel Asynchronous Split/Join
+//
+//   [A]
+//   | |
+//   v v
+// [B] [C]
+//   | |
+//   v v
+//   [D]
+//    |
+//    v
+//   [E]
+//
 var paspResults = ['910','78','56','34','12'],
     paspflow = conductor(),
     pasp = {
