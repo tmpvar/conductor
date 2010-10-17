@@ -41,7 +41,7 @@ var tests   = [],
 //
 // Tests
 //
-
+/*
 var sanityConductor = conductor(),
     sanityNode = sanityConductor.node(function(){}, "sanityNode"),
     sanityContext = new Context();
@@ -281,7 +281,7 @@ pAsync.A.input(0, pAsync.B.input(0));
 pAsync.B.input(1, pAsync.C.input(0));
 pAsync.C.output(pAsync.D.input(0));
 pflow.execute();
-
+*/
 
 // Paralell Asynchronous Split/Join
 var paspResults = [10,9,8,7,6,5,4,3,2,1],
