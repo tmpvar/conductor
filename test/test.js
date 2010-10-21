@@ -382,6 +382,25 @@ pasp.C.output(pasp.D.input(1));
 pasp.D.output(pasp.E.input(0));
 paspflow.execute();
 
+// User friendly route mapping
+var uf = conductor(),
+    ufSoon = soon("User friendly pipe mapping should work correctly.");
+    ufn = {
+      A : uf.node(function(callback) {
+        callback("hello");
+      }),
+      B : uf.node(function(data) {
+        return data + " world";
+      }),
+      C : uf.node(function(testData) {
+        ufSoon("Expecting 'hello world' not '" + testData + "'", testData === "hello world");
+      })
+    };
+
+ufn.A.args.callback(ufn.B.args.data());
+ufn.B.output(ufn.C.args.testData());
+uf.execute();
+
 //
 // RESULTS
 //

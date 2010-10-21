@@ -35,10 +35,10 @@ var conductor = require("../lib/conductor").conductor,
 port.output(listener.input(0));
 
 // Route the request to the `handler`'s first input port
-listener.input(1, handler.input(0));
+listener.args.request(handler.request());
 
 // Route the output of the `handler` to the `responder`'s first input
-handler.output(responder.input(0))
+handler.output(responder.body())
 
 // Route the `response` from the listener to the second input of the `responder` node
 listener.input(2, responder.input(1));
