@@ -64,7 +64,7 @@ ok("Root level context has no parent", (new Context()).parent === null);
 var reparented = new Context();
 reparented.reparent(new Context(null, true));
 ok("Reparented nodes should still be leafs",
-   reparented.parent.splitNode === true);
+   reparented.parent.forkNode === true);
 
 ok("a node's edges are empty by default",
    sanityNode.edges.input.length() === 0 &&
