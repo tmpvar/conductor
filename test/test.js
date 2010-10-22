@@ -401,6 +401,25 @@ ufn.A.args.callback(ufn.B.args.data());
 ufn.B.output(ufn.C.args.testData());
 uf.execute();
 
+// Function argument parsing tests
+var fapt        = conductor(),
+    newline     = fapt.node(function(a, b,   
+                  c) {}),
+    lineComment = fapt.node(function(a // this is a comment
+                            ,b){}),
+    multiComment = fapt.node(function(a /*
+      this is a multiline comment
+    */, b, /* single line comment */c) {});
+    
+ok("parsing new lines should not be a problem",
+    newline.args.a && newline.args.b && newline.args.c);
+
+ok("parsing line comments should not be a problem", 
+  lineComment.args.a && lineComment.args.b);
+
+ok("parsing multi-line comments should not be a problem", 
+  multiComment.args.a && multiComment.args.b && multiComment.args.c);
+
 //
 // RESULTS
 //
