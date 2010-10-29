@@ -1,7 +1,7 @@
 {
   "name": "conductor",
   "description": "Conductor is a code execution engine that takes a list of functions with defined inputs and outputs and chains then together in whatever way you can imagine.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [ "" ],
   "maintainers": [
     { "name": "Timothy Caswell", "web": "http://creationix.com" },
