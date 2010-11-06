@@ -295,7 +295,7 @@ sajAsyncFlow.execute();
 //  v
 // [C]
 //
-var results = [4,3,2,1],
+var results = {4:true,3:true,2:true,1:true},
     pflow = conductor(),
     pAsync = {
       A : pflow.node(function(fn) {
@@ -314,12 +314,14 @@ var results = [4,3,2,1],
         }, 1000/value);
       }),
       C : pflow.node(function(value) {
-        results.push(value);
         return value;
       }),
       D : pflow.node(function(value) {
-          var ex = results.shift();
-          ok("parallel results should be " + ex + " not " + value, value === ex);
+          var ex = results[value] || false;
+          if (ex) {
+            delete results[value];
+          }
+          ok("parallel results should be " + ex + " not " + value, ex);
       })
     };
 
@@ -342,20 +344,20 @@ pflow.execute();
 //    v
 //   [E]
 //
-var paspResults = ['910','78','56','34','12'],
+var paspResults = {'910':true,'78':true,'56':true,'34':true,'12':true},
     paspflow = conductor(),
     pasp = {
       A : paspflow.node(function(cb1, cb2) {
-        var count = 10, loc = 1;
+        var count = 10, loc = 1, timeout = 0;
         setTimeout(function paspnext() {
           cb1(loc);
           loc++;
           cb2(loc);
           loc++;
           if (loc <= count) {
-            setTimeout(paspnext, 0);
+            setTimeout(paspnext, timeout);
           }
-        }, 0);
+        }, timeout);
       }, "pasp-A"),
       B : paspflow.node(function(value, fn) {
         setTimeout(function() {
@@ -369,9 +371,12 @@ var paspResults = ['910','78','56','34','12'],
         return v1 + "" + v2;
       }, "pasp-D"),
       E : paspflow.node(function(value) {
-          var ex = paspResults.shift();
+          var ex = paspResults[value] || false;
+          if (ex) {
+            delete paspResults[value];
+          }
           ok("parallel split/join results should be " + ex + " not " + value,
-             value === ex);
+             ex);
       }, "pasp-E")
     };
 
