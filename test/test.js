@@ -67,9 +67,9 @@ ok("Reparented nodes should still be leafs",
    reparented.parent.forkNode === true);
 
 ok("a node's edges are empty by default",
-   sanityNode.edges.input.length() === 0 &&
-   sanityNode.edges.output.length() === 0 &&
-   sanityNode.edges.callback.length() === 0);
+   sanityNode.edges.input.length === 0 &&
+   sanityNode.edges.output.length === 0 &&
+   sanityNode.edges.callback.length === 0);
 
 ok("empty edges should be satisfied by default",
    sanityNode.edges.input.satisfied(sanityContext) &&
@@ -408,21 +408,21 @@ uf.execute();
 
 // Function argument parsing tests
 var fapt        = conductor(),
-    newline     = fapt.node(function(a, b,   
+    newline     = fapt.node(function(a, b,
                   c) {}),
     lineComment = fapt.node(function(a // this is a comment
                             ,b){}),
     multiComment = fapt.node(function(a /*
       this is a multiline comment
     */, b, /* single line comment */c) {});
-    
+
 ok("parsing new lines should not be a problem",
     newline.args.a && newline.args.b && newline.args.c);
 
-ok("parsing line comments should not be a problem", 
+ok("parsing line comments should not be a problem",
   lineComment.args.a && lineComment.args.b);
 
-ok("parsing multi-line comments should not be a problem", 
+ok("parsing multi-line comments should not be a problem",
   multiComment.args.a && multiComment.args.b && multiComment.args.c);
 
 //
