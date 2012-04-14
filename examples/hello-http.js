@@ -21,8 +21,10 @@ var conductor = require("../lib/conductor").conductor,
                 }, "listener"),
 
     // Create a node to handle the incoming request (routing/etc)
-    handler   = flow.node(function(request) { 
-                  return "hello world!\n"
+    index     = 0,
+    handler   = flow.node(function(request) {
+                  index++;
+                  return 'hello world! #' + index + '\n'
                 }, "handler"),
 
     // Create a node that will respond to the request
