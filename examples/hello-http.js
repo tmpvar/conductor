@@ -1,4 +1,4 @@
-var conductor = require("../lib/conductor").conductor,
+var conductor = require("../conductor").conductor,
     http      = require("http"),
 
     // Create an execution context for this example

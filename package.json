@@ -4,18 +4,33 @@
   "version": "0.2.0",
   "keywords": [],
   "maintainers": [
-    { "name": "Timothy Caswell", "web": "http://creationix.com" },
-    { "name": "Elijah Insua", "web": "http://tmpvar.com" }
+    "Timothy Caswell (http://creationix.com)",
+    "Elijah Insua (http://tmpvar.com)"
   ],
   "contributors": [
-    { "name": "Timothy Caswell", "web": "http://creationix.com" },
-    { "name": "Elijah Insua", "web": "http://tmpvar.com" }
+    "Timothy Caswell (http://creationix.com)",
+    "Elijah Insua (http://tmpvar.com)"
   ],
-  "licenses": [ "MIT" ],
+  "licenses": [
+    "MIT"
+  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/tmpvar/conductor.git"
   },
   "dependencies": {},
-  "main" : "lib/conductor"
+  "main": "lib/conductor",
+  "bugs": {
+    "url": "https://github.com/tmpvar/conductor/issues"
+  },
+  "homepage": "https://github.com/tmpvar/conductor",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Elijah Insua <tmpvar@gmail.com>",
+  "license": "MIT"
 }
