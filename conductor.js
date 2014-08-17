@@ -28,8 +28,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 (function (exports) {
   "use strict";
 
-  var Context, Edge, Executor, Node, Port,
-      contextIndex = 0;
+  // id for context nodes
+  var contextIndex = 0;
+
 
   // hang everything off of conductor
   if (!exports) {
@@ -38,6 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
     exports.conductor = conductor;
     exports = conductor;
   }
+
 
   function conductor() {
     var conductor = {
@@ -57,12 +59,18 @@ OTHER DEALINGS IN THE SOFTWARE.
     return conductor;
   };
 
+  conductor.Context = Context;
+  conductor.Edge = Edge;
+  conductor.Executor = Executor;
+  conductor.Node = Node;
+  conductor.Port = Port;
+
   /*
     Context is a means for tracking parallel execution flows and it provides
     a way to fork and join a flow.  Forks and Joins are tracked by using a
     tree that corresponds to nodes that have been executed.
   */
-  Context = exports.Context = function (parent, forkNode, conductor, disableEmit) {
+  function Context(parent, forkNode, conductor, disableEmit) {
     this.parent = parent || null;
     this.forkNode = (forkNode === true);
     this.id = contextIndex++;
@@ -179,7 +187,7 @@ OTHER DEALINGS IN THE SOFTWARE.
     In the case of join nodes, the input edge must be completely satisfied with values from Contexts that
     share a common fork Context.
   */
-  Edge = exports.Edge = function (node, type) {
+  function Edge(node, type) {
     this.type  = type;
     this.ports = {};
     this.node  = node;
@@ -404,7 +412,7 @@ OTHER DEALINGS IN THE SOFTWARE.
   };
 
   // Executor kicks off a a flow in a new (parentless) context
-  Executor = exports.Executor = function (conductor, context) {
+  function Executor(conductor, context) {
     var self = this;
     context = new Context(context, false, conductor, true);
 
@@ -438,7 +446,7 @@ OTHER DEALINGS IN THE SOFTWARE.
   };
 
   // Node provides a wrapper for functionality and Edges.
-  Node = exports.Node = function (fn, conductor, name) {
+  function Node(fn, conductor, name) {
     var self = this;
 
     // Every node in this flow gets attached to the conductor instance
@@ -559,7 +567,7 @@ OTHER DEALINGS IN THE SOFTWARE.
   /*
     Ports are the inlets/outlets in conductor.
   */
-  Port = exports.Port = function (edge, index) {
+  function Port(edge, index) {
     this.pipes = []; // these are actual routes
     this.edge = edge;
     this.callback = false;
