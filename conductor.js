@@ -31,7 +31,15 @@ OTHER DEALINGS IN THE SOFTWARE.
   var Context, Edge, Executor, Node, Port,
       contextIndex = 0;
 
-  exports.conductor = function () {
+  // hang everything off of conductor
+  if (!exports) {
+    exports = module.exports = conductor;
+  } else {
+    exports.conductor = conductor;
+    exports = conductor;
+  }
+
+  function conductor() {
     var conductor = {
       nodes  : [],
       node   : function (fn, name) {
@@ -666,4 +674,4 @@ OTHER DEALINGS IN THE SOFTWARE.
   };
 
 // Browser/CommonJS compat
-}((typeof exports === "undefined") ? window : exports));
+}((typeof exports === "undefined") ? window : null));

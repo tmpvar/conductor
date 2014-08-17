@@ -1,5 +1,5 @@
-var conductor = require("../lib/conductor").conductor,
-    Context   = require("../lib/conductor").Context;
+var conductor = require("../conductor");
+var Context   = conductor.Context;
 
 var tests   = [],
     pass    = 0,
